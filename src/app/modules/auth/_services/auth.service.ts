@@ -6,7 +6,10 @@ import { AuthModel } from '../_models/auth.model';
 import { AuthHTTPService } from './auth-http';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
-import { URL_SERVICIOS } from 'src/app/config/config';
+import { 
+  URL_SERVICIOS,
+  ENDPOINT_LOGIN_ADMIN
+} from 'src/app/config/config';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -61,9 +64,11 @@ export class AuthService implements OnDestroy {
   isLogued() {
     return ( this.token.length > 5 ) ? true : false;
   }
-login(email: string, password: string) {
+
+  login(email: string, password: string) {
+
     this.isLoadingSubject.next(true);
-    let url = URL_SERVICIOS + "/users/login";
+    let url = URL_SERVICIOS + ENDPOINT_LOGIN_ADMIN; //"/users/login";
     console.log({email, password})
     return this.http.post(url,{email, password}).pipe(
       map((auth: any) => {
@@ -82,7 +87,8 @@ login(email: string, password: string) {
       finalize(() => this.isLoadingSubject.next(false))
     );
   }
-logout() {
+
+  logout() {
     // localStorage.removeItem(this.authLocalStorageToken);
     this.user = null;
     this.token = '';

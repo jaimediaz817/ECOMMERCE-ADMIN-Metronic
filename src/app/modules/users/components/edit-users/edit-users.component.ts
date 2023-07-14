@@ -31,10 +31,25 @@ export class EditUsersComponent implements OnInit {
     this.isLoading$ = this._userService.isLoading$;
     this.loadForm();
   }
+
   loadForm(){
     this.formGroup = this.fb.group({
-      name: [this.user_selected.name,Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(100)])],
-      surname: [this.user_selected.surname,Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(100)])],
+      name: [
+        this.user_selected.name,
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(100)
+        ])
+      ],
+      surname: [
+        this.user_selected.surname,
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(100)
+        ])
+      ],
       email: [
         this.user_selected.email,
         Validators.compose([
@@ -43,7 +58,7 @@ export class EditUsersComponent implements OnInit {
           Validators.maxLength(249),
         ])
       ],
-      state: [this.user_selected.state],
+      user_status: [this.user_selected.user_status],
       role_id: [this.user_selected.role_id],
       password: [null, 
         Validators.compose([
@@ -58,25 +73,52 @@ export class EditUsersComponent implements OnInit {
     });
   }
 
-  save(){
-    if(this.formGroup.value.password && this.formGroup.value.rpassword){
-      if(this.formGroup.value.password != this.formGroup.value.rpassword){
-        this.toaster.open(NoticyAlertComponent,{text:`danger-'Upps! Necesita ingresar las contraseñas iguales.'`});
-      return;
+  save() 
+  {
+    if (this.formGroup.value.password && this.formGroup.value.rpassword) {
+
+      if (this.formGroup.value.password != this.formGroup.value.rpassword){
+        this.toaster.open(
+          NoticyAlertComponent,{
+            text:`danger-'Upps! Necesita ingresar las contraseñas iguales.'`
+          }
+        );
+
+        return;
       }
     }
-    this._userService.update(this.user_selected.id,this.formGroup.value).subscribe((resp:any) => {
-      console.log(resp);
-      if(resp.message == 400){
-        this.toaster.open(NoticyAlertComponent,{text:`warning-'EL USUARIO YA EXISTE.'`});
-        return;
-      }else{
-        this.toaster.open(NoticyAlertComponent,{text:`primary-'EL USUARIO HA REGISTRADO CAMBIOS SATISFACTORIAMENTE.'`});
-        this.modal.close();
-        this.usersE.emit(resp.user);
-        return;
-      }
-    })
+
+    this._userService
+      .update(
+        this.user_selected.id,
+        this.formGroup.value
+      ).subscribe((resp:any) => {
+
+        console.log(resp);
+
+        if(resp.status_code == 400){
+          this.toaster.open(
+            NoticyAlertComponent,{
+              text:`warning-'${resp.message}.'`
+            }
+          );
+
+          return;
+
+        } else {
+
+          this.toaster.open(
+            NoticyAlertComponent, {
+              text:`primary-'${resp.message}'`
+            }
+          );
+
+          this.modal.close();
+          this.usersE.emit(resp.data);
+          return;
+        }
+
+      });
   }
   // helpers for View
   isControlValid(controlName: string): boolean {
@@ -98,5 +140,4 @@ export class EditUsersComponent implements OnInit {
     const control = this.formGroup.controls[controlName];
     return control.dirty || control.touched;
   }
-
 }

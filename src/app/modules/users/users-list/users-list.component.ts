@@ -23,6 +23,7 @@ export class UsersListComponent implements OnInit {
   search:any = '';
 
   users:any = [];
+
   constructor(
     public fb:FormBuilder,
     public _userService: UsersService,
@@ -35,12 +36,13 @@ export class UsersListComponent implements OnInit {
   }
 
   allUsers(page=1){
-    this._userService.allUsers(page,this.state,this.search).subscribe((resp:any) => {
-      console.log(resp);
-      this.users = resp.users.data;
-      this.totalPages = resp.total;
-      this.currentPage = page;
-    });
+    this._userService.allUsers(page,this.state,this.search)
+      .subscribe((resp: any) => {
+        console.log(resp);
+        this.users = resp.users.data;
+        this.totalPages = resp.total;
+        this.currentPage = page;
+      });
   }
 
   reset(){
@@ -48,8 +50,13 @@ export class UsersListComponent implements OnInit {
     this.search = '';
     this.allUsers();
   }
+
   addUser(){
-    const modalRef = this.modelService.open(AddUsersComponent, {centered : true, size: 'md'});
+    const modalRef = this.modelService.open(
+      AddUsersComponent, 
+      {centered : true, size: 'md'}
+    );
+
     modalRef.result.then(
       () => {
 
@@ -57,10 +64,11 @@ export class UsersListComponent implements OnInit {
       () => {
         
       }
-    )
+    );
+
     modalRef.componentInstance.usersE.subscribe((resp:any) => {
-      console.log(resp);
-      resp.state = 1;
+      console.log("despues de emitir >>> ", resp);
+      resp.user_status = 1;
       this.users.unshift(resp);
     })
   }
@@ -76,11 +84,12 @@ export class UsersListComponent implements OnInit {
         
       }
     )
+
     modalRef.componentInstance.usersE.subscribe((resp:any) => {
       console.log(resp);
       let INDEX = this.users.findIndex(user => user.id == resp.id);
       this.users[INDEX] = resp;
-    })
+    });
   }
 
   delete(user){
@@ -94,11 +103,12 @@ export class UsersListComponent implements OnInit {
         
       }
     )
+
     modalRef.componentInstance.usersE.subscribe((resp:any) => {
       console.log(resp);
       let INDEX = this.users.findIndex(user => user.id == resp.id);
-      this.users.splice(INDEX,1);
-    })
+      this.users.splice(INDEX, 1);
+    });
   }
 
 

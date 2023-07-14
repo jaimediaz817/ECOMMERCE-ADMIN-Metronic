@@ -30,10 +30,20 @@ export class AddUsersComponent implements OnInit {
     this.isLoading$ = this._userService.isLoading$;
     this.loadForm();
   }
+  
   loadForm(){
+    // NOTE: agrupar elementos del formulario con validadores
     this.formGroup = this.fb.group({
-      name: [null,Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(100)])],
-      surname: [null,Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(100)])],
+      name: [null,Validators.compose([
+        Validators.required, 
+        Validators.minLength(3), 
+        Validators.maxLength(100)])
+      ],
+      surname: [null,Validators.compose([
+        Validators.required, 
+        Validators.minLength(3), 
+        Validators.maxLength(100)])
+      ],
       email: [
         null,
         Validators.compose([
@@ -42,14 +52,14 @@ export class AddUsersComponent implements OnInit {
           Validators.maxLength(249),
         ])
       ],
-      type_user: [2],
+      user_type: [2],
       role_id: ['1'],
       password: [null, 
         Validators.compose([
         Validators.required,
         Validators.maxLength(249),
       ])],
-      rpassword: [null, 
+      repeat_password: [null, 
         Validators.compose([
         Validators.required,
         Validators.maxLength(249),
@@ -58,23 +68,31 @@ export class AddUsersComponent implements OnInit {
   }
 
   save(){
-    if(this.formGroup.value.password != this.formGroup.value.rpassword){
+
+    if (this.formGroup.value.password != this.formGroup.value.repeat_password){
       // alert("NECESITAS DIGITAR IGUAL LAS CONTRASEÑAS");
       this.toaster.open(NoticyAlertComponent,{text:`danger-'Upps! Necesita ingresar las contraseñas iguales.'`});
       return;
     }
-    this._userService.register(this.formGroup.value).subscribe((resp:any) => {
-      console.log(resp);
-      if(resp.message == 400){
-        this.toaster.open(NoticyAlertComponent,{text:`warning-'EL USUARIO YA EXISTE.'`});
-        return;
-      }else{
-        this.toaster.open(NoticyAlertComponent,{text:`primary-'EL USUARIO HA SIDO CREADO SATISFACTORIAMENTE.'`});
-        this.modal.close();
-        this.usersE.emit(resp.user);
-        return;
-      }
-    })
+
+    this._userService.register(this.formGroup.value)
+      .subscribe((resp: any) => {
+      
+        console.log(resp);
+
+        if (resp.message == 400 || resp.status_code == 400) {
+
+          this.toaster.open(NoticyAlertComponent,{text:`warning-'EL USUARIO YA EXISTE.'`});
+          return;
+
+        } else {
+
+          this.toaster.open(NoticyAlertComponent,{text:`primary-'EL USUARIO HA SIDO CREADO SATISFACTORIAMENTE.'`});
+          this.modal.close();
+          this.usersE.emit(resp.data);
+          return;
+        }
+      });
   }
   // helpers for View
   isControlValid(controlName: string): boolean {

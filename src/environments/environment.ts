@@ -11,6 +11,12 @@ export const environment = {
   URL_BACKEND: 'http://127.0.0.1:8000/',
   URL_SERVICIOS: 'http://127.0.0.1:8000/api',
   URL_FROTEND: 'http://localhost:4200',
+
+  ENDPOINT_LOGIN_ADMIN: '/users/login-admin',
+  ENDPOINT_REGISTER_USER_ADMIN: '/users/admin/register',
+  ENDPOINT_EDIT_USER_ADMIN: '/users/admin/update/',
+  ENDPOINT_DELETE_USER_ADMIN: '/users/admin/delete/',
+  ENDPOINT_ALL_USERS_ADMIN: '/users/admin/all',
 };
 
 /*

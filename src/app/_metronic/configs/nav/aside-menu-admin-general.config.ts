@@ -10,6 +10,7 @@ export const AsideMenuAdminGeneral = {
         translate: 'MENU.DASHBOARD',
         bullet: 'dot',
       },
+
       { section: 'Usuario' },
       {
         title: 'Usuarios',
@@ -23,6 +24,24 @@ export const AsideMenuAdminGeneral = {
           {
             title: 'Gestion Usuarios',
             page: '/users/list'
+          }
+        ]
+      },
+
+      // Products and Categories
+      { section: 'Productos' },
+      {
+        title: 'Categorías',
+        root: true,
+        name: "categorias",
+        bullet: 'dot',
+        icon: 'flaticon2-user-outline-symbol',
+        svg: './assets/media/svg/icons/Electric/Gas-stove.svg',
+        page: '/categories',
+        submenu: [
+          {
+            title: 'Gestion Categorías',
+            page: '/categories/list'
           }
         ]
       },

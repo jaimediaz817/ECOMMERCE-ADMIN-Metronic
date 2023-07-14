@@ -133,17 +133,19 @@
                         <option value="1">ADMINISTRADOR GENERAL</option>
                     </select>
                 </div>
+
                 <div class="col-lg-10">
                   <label class="form-label">Selec. Estado: *</label>
                   <select
                     class="form-control form-control-solid form-control-lg"
                     name="status"
                     placeholder="Selec. Estado"
-                    formControlName="state"
+                    formControlName="user_status"
                   >
                     <option value="1">Activo</option>
-                    <option value="2">Desactivo</option></select
-                  >
+                    <option value="2">Inactivo</option>
+                    <option value="-1">Eliminado</option>
+                  </select>
                 </div>
 
             </div>
